@@ -238,7 +238,7 @@ clear adjIntervalData;
 % --------------
 switch iParams.outFile.format
     case {'mat','cagt'}
-        [success,msg,msgId] = movefile(iParams.tempFile , iParams.outFile.name);
+        [success,msg,msgId] = copyfile(iParams.tempFile , iParams.outFile.name);
         assert(success,msgId,msg);
         save( iParams.outFile.name , '-append', '-struct', 'outStruct' );
 end
@@ -246,14 +246,19 @@ end
 if isdeployed
     varargout = {};
 else
-    if nargout > 0
+    if nargout > 0        
         varargout{1} = outStruct.(iParams.outFile.varName);
+        load(iParams.tempFile,'adjIntervalData');
         varargout{2} = adjIntervalData;
+        load(iParams.tempFile,'intervalData');
         varargout{3} = intervalData;        
     else
         varargout = {};
     end
 end
+
+% Delete temp file
+delete(iParams.tempFile);
 
 end
 
