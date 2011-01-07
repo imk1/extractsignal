@@ -73,6 +73,29 @@ function varargout = extractSignal(varargin)
 %                            : def: otherwise: NaN
 % ms : smoothing bandwidth for triweight kernel density smoothing
 %                            : def: 1 (no smoothing) >=1
+% --------------------
+% OUTPUT ARGUMENTS
+% --------------------
+% intervals<dataset>
+%   .chr[nominal] : chromosome names
+%   .start[double]: start positions (1-based)
+%   .stop[double]: stop positions (1-based)
+%   .strand[nominal]: +/-
+%   .summit[double]: absolute position of summit (1-based) [OPTIONAL]
+%
+% adjustedIntervals<dataset>
+% is a version of intervalData where the start/stops have been adjusted to make them valid and based on slop parameters
+%            An addition column 'correction' is added
+%   .correction[sparse double]: 0/-1/1/2
+%      correction==0: No error correction
+%      correction==1: Pad the left of the signal vector with NaNs to fit predominant interval length (valid for fw=true)
+%      correction==2: Pad the right of the signal vector with NaNs to fit predominant interval length (valid for fw=true)
+%      correction==-1: invalid interval (set signal vector to NaN)
+%
+% signal{[single]} or signal[single] 
+%     has same number of rows as number of intervals
+%     Each cell/row contains a row vector of values representing the result of metaFunc (mf) applied to signal 
+%     corresponding to the interval coordinates in adjInterval.
 
 %% Arguments for deployed version
 % extractSignal(vargin)
