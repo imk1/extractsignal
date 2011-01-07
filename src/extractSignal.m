@@ -1,6 +1,6 @@
 function varargout = extractSignal(varargin)
 % Extracts signal from a genome-wide signal file corresponding to intervals in an interval File
-% [signal , adjustedIntervals , intervals ] = extractSignal( intervalFile , trackFile , varargin )
+% [signal , adjIntervalData , intervalData ] = extractSignal( intervalFile , trackFile , varargin )
 % --------------------
 % MANDATORY ARGUMENTS
 % --------------------
@@ -12,9 +12,17 @@ function varargout = extractSignal(varargin)
 % if : format of interval file
 %                            : def: 'narrowpeak'
 %                            :      'bed','mat','summit','gff','gtf'
+%                            : if set to 'mat', matFile must contain a dataset array variable 'intervalData'
+%                            : with the following fields (additional fields are allowed but not used)
+%                                   intervalData<dataset>
+%                                       .chr[nominal] : chromosome names
+%                                       .start[double]: start positions (1-based)
+%                                       .stop[double]: stop positions (1-based)
+%                                       .strand[nominal]: +/-
+%                                       .summit[double]: absolute position of summit (1-based) [OPTIONAL]
 % tf : format of track file
 %                            : def: 'mat'
-% tv : track variable prefix (only relevant for mat files) {def: 'signal_'}
+% tv : track variable prefix (only relevant for tf=mat files) {def: 'signal_'}
 % us : use summit information to readjust intervals by slopping
 %                            : def: 'false' (slop intervals using the ends of the intervals)
 %                            :      'midpoint' (use midpoint of interval as summit to slop)
@@ -76,16 +84,16 @@ function varargout = extractSignal(varargin)
 % --------------------
 % OUTPUT ARGUMENTS
 % --------------------
-% intervals<dataset>
+% intervalData<dataset>
 %   .chr[nominal] : chromosome names
 %   .start[double]: start positions (1-based)
 %   .stop[double]: stop positions (1-based)
 %   .strand[nominal]: +/-
 %   .summit[double]: absolute position of summit (1-based) [OPTIONAL]
 %
-% adjustedIntervals<dataset>
-% is a version of intervalData where the start/stops have been adjusted to make them valid and based on slop parameters
-%            An addition column 'correction' is added
+% adjIntervalData<dataset>
+%   is a version of intervalData where the start/stops have been adjusted based on various interval adjustment options
+%   it has the same fields as intervalData plus one addition variable 'correction'
 %   .correction[sparse double]: 0/-1/1/2
 %      correction==0: No error correction
 %      correction==1: Pad the left of the signal vector with NaNs to fit predominant interval length (valid for fw=true)
@@ -300,7 +308,7 @@ function helpLine = getUsageHelp()
 hlnum = 0;
 hlnum = hlnum + 1; helpLine{hlnum} = '-------------------------------------------------------------------------\n';
 hlnum = hlnum + 1; helpLine{hlnum} = 'Program: extractSignal (extract signal data from genome-wide signal/coverage data using interval data and apply optional meta functions on the signal vectors)\n';
-hlnum = hlnum + 1; helpLine{hlnum} = 'Version: 0.1 (MATLAB r2009b)\n';
+hlnum = hlnum + 1; helpLine{hlnum} = 'Version: 0.1 (MATLAB r2010b)\n';
 hlnum = hlnum + 1; helpLine{hlnum} = 'Contact: Anshul Kundaje (akundaje@stanford.edu)\n';
 hlnum = hlnum + 1; helpLine{hlnum} = '-------------------------------------------------------------------------\n';
 hlnum = hlnum + 1; helpLine{hlnum} = '\n';
@@ -328,13 +336,21 @@ hlnum = hlnum + 1; helpLine{hlnum} = '\n';
 hlnum = hlnum + 1; helpLine{hlnum} = '-if= / -intervalFileFormat= : format of interval file\n';
 hlnum = hlnum + 1; helpLine{hlnum} = '                            : def: narrowpeak\n';
 hlnum = hlnum + 1; helpLine{hlnum} = '                            :      bed,mat,summit,gff,gtf\n';
+hlnum = hlnum + 1; helpLine{hlnum} = '                            : if set to mat, matFile must contain a dataset array variable called "intervalData"\n';
+hlnum = hlnum + 1; helpLine{hlnum} = '                            : with the following fields (additional fields are allowed but not used)\n';
+hlnum = hlnum + 1; helpLine{hlnum} = '                                  intervalData<dataset>\n';
+hlnum = hlnum + 1; helpLine{hlnum} = '                                      .chr[nominal] : chromosome names\n';
+hlnum = hlnum + 1; helpLine{hlnum} = '                                      .start[double]: start positions (1-based)\n';
+hlnum = hlnum + 1; helpLine{hlnum} = '                                      .stop[double]: stop positions (1-based)\n';
+hlnum = hlnum + 1; helpLine{hlnum} = '                                      .strand[nominal]: +/-\n';
+hlnum = hlnum + 1; helpLine{hlnum} = '                                      .summit[double]: absolute position of summit (1-based) [OPTIONAL]\n';
 hlnum = hlnum + 1; helpLine{hlnum} = '\n';
 
 hlnum = hlnum + 1; helpLine{hlnum} = '-tf= / -trackFileFormat=    : format of track file\n';
 hlnum = hlnum + 1; helpLine{hlnum} = '                            : def: mat\n';
 hlnum = hlnum + 1; helpLine{hlnum} = '\n';
 
-hlnum = hlnum + 1; helpLine{hlnum} = '-tv= / -trackFileVarPrefix= : track variable prefix (only relevant for mat files)\n';
+hlnum = hlnum + 1; helpLine{hlnum} = '-tv= / -trackFileVarPrefix= : track variable prefix (only relevant for -tf=mat files)\n';
 hlnum = hlnum + 1; helpLine{hlnum} = '                            : def: signal_\n';
 hlnum = hlnum + 1; helpLine{hlnum} = '\n';
 

@@ -28,14 +28,14 @@ switch slopUseSummit
         
     case 'midpoint'
         
+        midPoint = floor( (intervalData.start + intervalData.stop) / 2 );
         if slopStrand % Use strand info
-            plusStrand = (intervalData.strand == '+');
-            midPoint = floor( (intervalData.start + intervalData.stop) / 2 );
+            plusStrand = (intervalData.strand == '+');            
             intervalData.start = midPoint - (plusStrand * slopLeft + ~plusStrand * slopRight);
             intervalData.stop =  midPoint + (plusStrand * slopRight + ~plusStrand * slopLeft);            
         else
-            intervalData.start = intervalData.start - slopLeft;
-            intervalData.stop = intervalData.stop + slopRight;            
+            intervalData.start = midPoint - slopLeft;
+            intervalData.stop = midPoint + slopRight;            
         end
         
     case 'peak'
