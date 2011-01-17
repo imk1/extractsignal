@@ -2,27 +2,7 @@ Author: Anshul Kundaje
 Email: akundaje _at_ stanford _dot_ edu
 Jan 16, 2011
 
--------------------------------------------------------------------------------
-SUPPORTED PLATFORMS AND REQUIRED SOFTWARE
--------------------------------------------------------------------------------
-- linux x64
-
-- The native matlab code runs on matlab2009b and above.
-  Start matlab and type the following before using the code .
-  
-  cd src/
-  addpath(genpath(pwd));
-  help extractSignal
-  
-- The compiled matlab code in /bin runs on unix x64 machines. It requires the 
-matlab2010b run time environment (MCR) to be installed. Email me if you need the
-MCR.
- 
-NOTE: The MCR is free and you do not need a matlab license to install or run it.
-
-- NOTE: the syntax for calling the compiled code vs native matlab code are different
-
--------------------------------------------------------------------------------
+------------------------------------------------------------------------------
 INTRODUCTION
 -------------------------------------------------------------------------------
 
@@ -48,11 +28,115 @@ The order of operations is as follows:
 - Signal is optionally smoothed if requested by the user
 - Optional meta function is applied to the signal vector from each interval
 
-NOTE:
+-------------------------------------------------------------------------------
+SUPPORTED PLATFORMS AND REQUIRED SOFTWARE
+-------------------------------------------------------------------------------
+- linux x64
+
+- The native matlab code runs on matlab2009b and above.
+  Start matlab and type the following before using the code .
+  
+  cd src/
+  addpath(genpath(pwd));
+  help extractSignal
+  
+- The compiled matlab code in /bin runs on unix x64 machines. It requires the 
+matlab2010b run time environment (MCR) to be installed. MCR installation instructions
+are given below.
+ 
+NOTE: The MCR is free and you do not need a matlab license to install or run it.
+
+- NOTE: the syntax for calling the compiled code vs native matlab code are different
+
+-------------------------------------------------------------------------------
+MCR INSTALLTION INSTRUCTIONS
+-------------------------------------------------------------------------------
+In order to run this code and/or any MATLAB compiled code, you will need the 
+MATLAB runtime library. Please use the correct version of the MCR.
+This version of the executable was compiled using MCR V7.14 which is equivalent 
+to the MATLAB R2010b release.
+
+Download the installer for unix x64 from here http://www.ebi.ac.uk/~anshul/public/softwareRepo/MCR2010b.bin
+
+If you haven't installed the MCR, you MUST do that using this command
+
+./MCRInstaller.bin -console
+
+If you need to specify a specific temp directory then also use the option 
+
+-is:tempdir <tempdirname>
+
+The installer will prompt you to select the directory (<MCR_ROOT>) you want to 
+install the MCR into. e.g. /home/akundaje/software/mcroot
+
+NOTE: Make sure your installation directory has write permissions and has atleast 500 MB of disk space.
+
+The installation should go smoothly with the above command. 
+However, if you are interested in other installation options you can consult
+http://www.mathworks.com/access/helpdesk/help/toolbox/compiler/bru23df-1.html
+
+NOTE: You need to install the MCR ONLY once on the machine/cluster you plan to 
+run MATLAB compiled code.
+
+If you want to uninstall the MCR , follow this procedure:
+
+Navigate to your MCR installation directory using the cd command.
+cd into the _uninst directory
+Run the uninstaller.bin program.
+./uninstaller.bin -console
+
+---------------
+Setting paths
+---------------
+You need to set the following environment variables for the compiled MATLAB code
+ to run correctly. These environment variables MUST be set before calling any
+ matlab compiled code.
+
+You can add the following lines to your .bashrc or .cshrc file if you want to 
+avoid settings these variables everytime you want to run the code
+
+If you are using the bash shell or modifying .bashrc then use
+
+MCRROOT=<MCR_ROOT>/v714
+LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:${MCRROOT}/runtime/glnxa64
+LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:${MCRROOT}/bin/glnxa64
+LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:${MCRROOT}/sys/os/glnxa64
+MCRJRE=${MCRROOT}/sys/java/jre/glnxa64/jre/lib/amd64
+LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:${MCRJRE}/native_threads
+LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:${MCRJRE}/server
+LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:${MCRJRE}
+XAPPLRESDIR=${MCRROOT}/X11/app-defaults
+export LD_LIBRARY_PATH
+export XAPPLRESDIR
+If you are using the csh shell or modifying .cshrc then use
+
+setenv MCRROOT <MCR_ROOT>/v714
+setenv LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:${MCRROOT}/runtime/glnxa64
+setenv LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:${MCRROOT}/bin/glnxa64
+setenv LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:${MCRROOT}/sys/os/glnxa64 
+setenv LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:${MCRROOT}/sys/java/jre/glnxa64/jre/lib/amd64/native_threads
+setenv LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:${MCRROOT}/sys/java/jre/glnxa64/jre/lib/amd64/server
+setenv LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:${MCRROOT}/sys/java/jre/glnxa64/jre/lib/amd64
+setenv XAPPLRESDIR ${MCRROOT}/X11/app-defaults
+
+You can add the /bin directory to your $PATH environment variable by adding the 
+following line to your .bashrc file
+export PATH="[absolute_path_to_bin_directory]:${PATH}"
+
+Now you can check if extractSignal works by typing
+extractSignal -h
+
+If you dont add the /bin directory to your $PATH. Then you need to go to the /bin
+directory and call extract signal as
+./extractSignal -h
+
+-------------------------------------------------------------------------------
+IMPORTANT NOTES
+-------------------------------------------------------------------------------
 - All arguments are specified as [argument_name]=[argument_value] . No spaces are allowed.
 - The output signal can contain NaN (not a number). This can happen if the interval is invalid OR
   if the signal itself was missing/not measured throughout the interval.
-  
+ 
 -------------------------------------------------------------------------------
 COMPILED BINARY USAGE:
 -------------------------------------------------------------------------------
