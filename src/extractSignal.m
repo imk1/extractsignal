@@ -76,7 +76,9 @@ function varargout = extractSignal(varargin)
 %                            : def: trimmean: 5 [0,100] x/2 % of top and bottom values will be removed before computing mean
 %                            : def: samplerate: 10 [>=1]
 %                            : def: samplewidth: 0 [>=0] 0 means full width
-%                            : def: samplepos: 0.5 [>=0] decimal values means fractional position from start, values >=1 refers to actual coordinates (Can be a vector of values)
+%                            : def: samplepos: 0.5 [>=0]
+%                            :      decimal values < 1 means fractional position from start,
+%                            :      values >=1 refers to actual coordinates (Can be a vector of values)
 %                            : def: quantile: 0.5 [0,1] (Can be a vector of values)
 %                            : def: otherwise: NaN
 % ms : smoothing bandwidth for triweight kernel density smoothing
@@ -164,14 +166,16 @@ function varargout = extractSignal(varargin)
 %                            :      quantile : multiple parameters allowed
 %                            :      samplerate : sample interval every 'x' bp
 %                            :      samplewidth: sample interval uniformly to get 'x' bp intervals
-%                            :      samplepos: sample specific positions
+%                            :      samplepos: sample specific positions relative to interval start=1
 % -mp= / -metaFuncParams=    : parameters for the metaFunctions
 %                            : def: std,var: 1 {0,1} 0 means std is obtained by dividing by N-1
 %                            : def: zscore: 1 {0,1} 0 means std is obtained by dividing by N-1
 %                            : def: trimmean: 5 [0,100] x/2 % of top and bottom values will be removed before computing mean
 %                            : def: samplerate: 10 [>=1]
 %                            : def: samplewidth: 0 [>=0] 0 means full width
-%                            : def: samplepos: 0.5 [>=0] multiple arguments allowed, decimal values means fractional position from start, values >=1 refers to actual coordinates,
+%                            : def: samplepos: 0.5 [>=0] multiple arguments allowed,
+%                            :      decimal values < 1 means fractional position from start
+%                            :      values >=1 refers to actual coordinates
 %                            : def: quantile: 0.5 [0,1] multiple arguments allowed
 %                            : def: otherwise: NaN
 % -ms= / -metaFuncSmooth=    : smoothing bandwidth for triweight kernel density smoothing
@@ -418,7 +422,7 @@ hlnum = hlnum + 1; helpLine{hlnum} = '                            :      mean,st
 hlnum = hlnum + 1; helpLine{hlnum} = '                            :      quantile : multiple parameters allowed\n';
 hlnum = hlnum + 1; helpLine{hlnum} = '                            :      samplerate : sample interval every x bp\n';
 hlnum = hlnum + 1; helpLine{hlnum} = '                            :      samplewidth: sample interval uniformly to get x bp intervals\n';
-hlnum = hlnum + 1; helpLine{hlnum} = '                            :      samplepos: sample specific positions\n';
+hlnum = hlnum + 1; helpLine{hlnum} = '                            :      samplepos: sample specific positions relative to interval start=1\n';
 hlnum = hlnum + 1; helpLine{hlnum} = '\n';
 
 hlnum = hlnum + 1; helpLine{hlnum} = '-mp= / -metaFuncParams=     : parameters for the metaFunctions\n';
@@ -427,7 +431,9 @@ hlnum = hlnum + 1; helpLine{hlnum} = '                            : def: trimmea
 hlnum = hlnum + 1; helpLine{hlnum} = '                            : def: samplerate: 10 [>=1] sample every x bp\n';
 hlnum = hlnum + 1; helpLine{hlnum} = '                            : def: samplewidth: 0 [>=0] sample to get specific width (0 means full width)\n';
 hlnum = hlnum + 1; helpLine{hlnum} = '                            : def: quantile: 0.5 [0,1] multiple arguments allowed\n';
-hlnum = hlnum + 1; helpLine{hlnum} = '                            : def: samplepos: 0.5 [>=0] multiple arguments allowed, decimal values means fractional position from start, values >=1 refers to actual coordinates\n';
+hlnum = hlnum + 1; helpLine{hlnum} = '                            : def: samplepos: 0.5 [>=0] multiple arguments allowed,\n';
+hlnum = hlnum + 1; helpLine{hlnum} = '                            :      decimal values < 1 means fractional position from start,\n';
+hlnum = hlnum + 1; helpLine{hlnum} = '                            :      values >=1 refers to actual coordinates\n';
 hlnum = hlnum + 1; helpLine{hlnum} = '                            : def: otherwise: NaN\n';
 hlnum = hlnum + 1; helpLine{hlnum} = '\n';
 
