@@ -47,7 +47,7 @@ function varargout = extractSignal(varargin)
 %                            : def: [intervalFileDir]/[trackFileRoot]_VS_[intervalFileRoot].[outputFileFormat]
 % of : output file format
 %                            : def: 'mat'
-%                            : 'cagt'
+%                            : 'cagt' Format: chr\tstart\stop\tsignalVals (separated by ,)
 % ov : output file variable name (valid for mat format)
 %                            : def: genvarname(esig_[trackFileRoot]_VS_[intervalFileRoot])
 % mf : metaFunction to be applied to each signal vector corresponding to each interval
@@ -142,7 +142,7 @@ function varargout = extractSignal(varargin)
 %                            : def: [intervalFileDir]/[trackFileRoot]_VS_[intervalFileRoot].[outputFileFormat]
 % -of= / -outputFileFormat=  : output file format
 %                            : def: mat
-%                            : def: cagt
+%                            :      cagt Format: chr\tstart\stop\tsignalVals (separated by ,)
 % -ov= / -outputFileVar=     : output file variable name (valid for mat format)
 %                            : def: genvarname(esig_[trackFileRoot]_VS_[intervalFileRoot])
 % -mf= / -metaFuncName=      : metaFunction to be applied to each signal vector corresponding to each interval
@@ -262,16 +262,18 @@ else
 end
 adjIntervalData.Properties.UserData = iParams;
 save(iParams.tempFile,'adjIntervalData','-append'); % Temporarily save adjusted interval data
-clear adjIntervalData;
 
 % --------------
 %% Ouput/save signal data
 % --------------
+fprintf('Writing output file ..\n');
 switch iParams.outFile.format
-    case {'mat','cagt'}
-        [success,msg,msgId] = copyfile(iParams.tempFile , iParams.outFile.name);
+    case 'mat'
+        [success,msg,msgId] = copyfile(iParams.tempFile , iParams.outFile.name , 'f');
         assert(success,msgId,msg);
         save( iParams.outFile.name , '-append', '-struct', 'outStruct' );
+    case 'cagt'
+        writeCagt( iParams.outFile.name , adjIntervalData , outStruct.(iParams.outFile.varName) );        
 end
 
 if isdeployed
@@ -279,7 +281,6 @@ if isdeployed
 else
     if nargout > 0        
         varargout{1} = outStruct.(iParams.outFile.varName);
-        load(iParams.tempFile,'adjIntervalData');
         varargout{2} = adjIntervalData;
         load(iParams.tempFile,'intervalData');
         varargout{3} = intervalData;        
@@ -390,7 +391,7 @@ hlnum = hlnum + 1; helpLine{hlnum} = '\n';
 
 hlnum = hlnum + 1; helpLine{hlnum} = '-of= / -outputFileFormat=   : output file format\n';
 hlnum = hlnum + 1; helpLine{hlnum} = '                            : def: mat\n';
-hlnum = hlnum + 1; helpLine{hlnum} = '                            : def: cagt\n';
+hlnum = hlnum + 1; helpLine{hlnum} = '                            :      cagt Format: chr\tstart\stop\tsignalVals (separated by ,)\n';
 hlnum = hlnum + 1; helpLine{hlnum} = '\n';
 
 hlnum = hlnum + 1; helpLine{hlnum} = '-ov= / -outputFileVar=      : output file variable name (valid for mat format)\n';
