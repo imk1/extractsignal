@@ -144,7 +144,7 @@ function varargout = extractSignal(varargin)
 %                            : def: [intervalFileDir]/[trackFileRoot]_VS_[intervalFileRoot].[outputFileFormat]
 % -of= / -outputFileFormat=  : output file format
 %                            : def: mat
-%                            :      cagt Format: chr\tstart\stop\tsignalVals (separated by ,)
+%                            :      cagt Format: chr[tab]start[tab]stop[tab]signalVals (separated by ,)
 % -ov= / -outputFileVar=     : output file variable name (valid for mat format)
 %                            : def: genvarname(esig_[trackFileRoot]_VS_[intervalFileRoot])
 % -mf= / -metaFuncName=      : metaFunction to be applied to each signal vector corresponding to each interval
@@ -395,7 +395,7 @@ hlnum = hlnum + 1; helpLine{hlnum} = '\n';
 
 hlnum = hlnum + 1; helpLine{hlnum} = '-of= / -outputFileFormat=   : output file format\n';
 hlnum = hlnum + 1; helpLine{hlnum} = '                            : def: mat\n';
-hlnum = hlnum + 1; helpLine{hlnum} = '                            :      cagt Format: chr\tstart\stop\tsignalVals (separated by ,)\n';
+hlnum = hlnum + 1; helpLine{hlnum} = '                            :      cagt Format: chr[tab]start[tab]stop[tab]signalVals (separated by ,)\n';
 hlnum = hlnum + 1; helpLine{hlnum} = '\n';
 
 hlnum = hlnum + 1; helpLine{hlnum} = '-ov= / -outputFileVar=      : output file variable name (valid for mat format)\n';
