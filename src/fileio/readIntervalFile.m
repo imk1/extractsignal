@@ -39,7 +39,7 @@ end
 
 if strcmpi(readMode,'minimal')    
     colNames = get( intervalData , 'VarNames');
-    minimalSet = {'chr','start','stop','strand','summit'};
+    minimalSet = {'chr','start','stop','strand','summit','name'};
     retColNames = intersect( minimalSet , colNames );
     intervalData = intervalData( : , retColNames );
 end

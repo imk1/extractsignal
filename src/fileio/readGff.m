@@ -5,7 +5,7 @@ function intervalData = readGff(iFile)
 tmpInputFile = tmpCopyFile(iFile); % Make tmp copy of file if required
 
 fp = fopen(tmpInputFile,'r');
-formatString = '%s%s%s%n%n%n%c%*[^\n]';
+formatString = '%s%s%s%n%n%s%c%*[^\n]';
 try
     iFileData = textscan(fp,formatString,'CommentStyle','#', 'ReturnOnError', false);
 catch ME

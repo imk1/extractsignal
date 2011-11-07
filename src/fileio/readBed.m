@@ -11,7 +11,7 @@ splitLine = textscan(firstLine,'%s');
 nCols = numel(splitLine{1});
 fseek(fp,0,-1); % Rewind the file
 
-fullFormatString = '%s%n%n%s%n%c%n%n%s%n%s%s'; % 12 columns
+fullFormatString = '%s%n%n%s%s%c%n%n%s%n%s%s'; % 12 columns
 
 if nCols > 12
     nCols = 12;

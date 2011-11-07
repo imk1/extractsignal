@@ -5,7 +5,7 @@ function intervalData = readNarrowPeak(iFile)
 tmpInputFile = tmpCopyFile(iFile); % Make tmp copy of file if required
 
 fp = fopen(tmpInputFile,'r');
-formatString = '%s%n%n%s%n%c%n%n%n%n%*[^\n]'; % 9 columns
+formatString = '%s%n%n%s%s%c%n%n%n%n%*[^\n]'; % 9 columns
 try
     iFileData = textscan(fp,formatString,'CommentStyle','#', 'ReturnOnError', false);
 catch ME
