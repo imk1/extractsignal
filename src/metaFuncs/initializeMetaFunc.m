@@ -42,7 +42,7 @@ switch metaFuncName
     case 'trimmean'
         metaFuncHandle = @(x) trimmean( smoothSignal(x,smoothBw) , metaFuncParams(1) , 'round' , 2 );
     case 'sum'
-        metaFuncHandle = @(x) nansum( smoothSignal(x,smoothBw) , 2 );
+        metaFuncHandle = @(x) nanmean( smoothSignal(x,smoothBw) , 2 ) .* sum(~isnan(x),2);
     case 'max'
         metaFuncHandle = @(x) getMax( smoothSignal(x,smoothBw) );
     case 'min'
